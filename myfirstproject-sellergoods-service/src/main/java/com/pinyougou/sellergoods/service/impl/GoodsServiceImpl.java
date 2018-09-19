@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.pinyougou.mapper.*;
 import com.pinyougou.pojo.*;
 import com.pinyougou.pojogroup.Goods;
@@ -69,6 +68,7 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public void add(Goods goods) {
         TbGoods tbGoods = goods.getGoods();
+        tbGoods.setAuditStatus("0");
         goodsMapper.insert(tbGoods);
         Long id = tbGoods.getId();
         TbGoodsDesc goodsDesc = goods.getGoodsDesc();
@@ -144,8 +144,18 @@ public class GoodsServiceImpl implements GoodsService {
      * @return
      */
     @Override
-    public TbGoods findOne(Long id) {
-        return goodsMapper.selectByPrimaryKey(id);
+    public Goods findOne(Long id) {
+        Goods goods = new Goods();
+        TbGoods tbGoods = goodsMapper.selectByPrimaryKey(id);
+        goods.setGoods(tbGoods);
+        TbGoodsDesc tbGoodsDesc = goodsDescMapper.selectByPrimaryKey(id);
+        goods.setGoodsDesc(tbGoodsDesc);
+        TbItemExample example = new TbItemExample();
+        TbItemExample.Criteria criteria = example.createCriteria();
+        criteria.andGoodsIdEqualTo(id);
+        List<TbItem> itemList = itemMapper.selectByExample(example);
+        goods.setItemList(itemList);
+        return goods;
     }
 
     /**
@@ -155,6 +165,11 @@ public class GoodsServiceImpl implements GoodsService {
     public void delete(Long[] ids) {
         for (Long id : ids) {
             goodsMapper.deleteByPrimaryKey(id);
+            goodsDescMapper.deleteByPrimaryKey(id);
+            TbItemExample example = new TbItemExample();
+            TbItemExample.Criteria criteria = example.createCriteria();
+            criteria.andGoodsIdEqualTo(id);
+            itemMapper.deleteByExample(example);
         }
     }
 

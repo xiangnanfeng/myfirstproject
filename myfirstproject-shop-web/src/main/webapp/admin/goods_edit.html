@@ -35,7 +35,7 @@
     
 </head>
 
-<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="goodsController" ng-init="queryItemCat1List()">
+<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="goodsController" ng-init="queryItemCat1List();findOne()">
 
             <!-- 正文区域 -->
             <section class="content">
@@ -98,7 +98,7 @@
 		                           
 		                           <div class="col-md-2 title">品牌</div>
 		                           <div class="col-md-10 data">
-		                              <select class="form-control" ng-model="entity.goods.typeTemplateId" ng-options="brand.id as brand.text for brand in brandIds"></select>
+		                              <select class="form-control" ng-model="entity.goods.brandId" ng-options="brand.id as brand.text for brand in brandIds"></select>
 		                           </div>
 		
 								   <div class="col-md-2 title">副标题</div>

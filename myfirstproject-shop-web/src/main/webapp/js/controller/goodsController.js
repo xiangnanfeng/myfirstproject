@@ -25,6 +25,7 @@ app.controller('goodsController', function ($scope, $controller, goodsService, u
     //查询实体
     $scope.findOne = function () {
         var id = $location.search()['id'];
+
         if (id != null) {
             goodsService.findOne(id).success(
                 function (response) {
@@ -32,23 +33,33 @@ app.controller('goodsController', function ($scope, $controller, goodsService, u
                     editor.html(response.goodsDesc.introduction);
                     $scope.entity.goodsDesc.itemImages = JSON.parse(response.goodsDesc.itemImages);
                     $scope.entity.goodsDesc.customAttributeItems = JSON.parse(response.goodsDesc.customAttributeItems);
-
+                    $scope.entity.itemList=response.itemList;
+                    for(var i=0;i<$scope.entity.itemList.length;i++){
+                        $scope.entity.itemList[i].spec=JSON.parse($scope.entity.itemList[i].spec);
+                    }
                 }
             );
         }
     }
-    $scope.entity = {goods: {}, goodsDesc: {itemImages: [], specificationItems: []}};
+    $scope.entity = {goods: {}, goodsDesc: {itemImages: [], specificationItems: []},itemList:[]};
 
     //保存
-    $scope.add = function () {
+    $scope.save = function () {
+        var object = null;
+        if($scope.entity.goods.id!=null){
+            object=goodsService.update($scope.entity);
+        }else {
+            object=goodsService.add($scope.entity);
+        }
         $scope.entity.goodsDesc.introduction = editor.html();
-        goodsService.add($scope.entity).success(
+        object.success(
             function (response) {
                 if (response.success) {
                     //重新查询
                     alert(response.message);//
-                    $scope.entity = {goods: {}, goodsDesc: {}};
+                    $scope.entity = {goods: {}, goodsDesc: {itemImages: [], specificationItems: []},itemList:[]};;
                     editor.html('');
+                    location.href="goods.html";
                 } else {
                     alert(response.message);
                 }
@@ -93,7 +104,6 @@ app.controller('goodsController', function ($scope, $controller, goodsService, u
             function (response) {
                 if (response.success) {
                     $scope.image.url = response.message;
-                    alert(response.message);
                 } else {
                     alert(response.message);
                 }
@@ -195,8 +205,7 @@ app.controller('goodsController', function ($scope, $controller, goodsService, u
     }
 
     $scope.createItemList = function () {
-        $scope.entity.itemList = [{spec: {}, price: 0, num: 99999, status: '0', isDefault: '0'}]
-        ;//初始
+        $scope.entity.itemList = [{spec: {}, price: 0, num: 99999, status: '0', isDefault: '0'}];//初始
         var items = $scope.entity.goodsDesc.specificationItems;
         for (var i = 0; i < items.length; i++) {
             $scope.entity.itemList =
@@ -225,6 +234,22 @@ app.controller('goodsController', function ($scope, $controller, goodsService, u
             function (response) {
                 for (var i = 0; i < response.length; i++) {
                     $scope.ItemCatList[response[i].id] = response[i].name;
+                }
+            }
+        );
+    }
+    
+    $scope.marketable=function () {
+        goodsService.marketable($scope.selectIds).success(
+            function (response) {
+                if(response.success){
+                    alert(response.message);
+                    $scope.reloadList();
+                    $scope.selectIds=[];
+                }else {
+                    alert(response.message);
+                    $scope.reloadList();
+                    $scope.selectIds=[];
                 }
             }
         );

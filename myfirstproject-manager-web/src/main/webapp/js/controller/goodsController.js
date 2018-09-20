@@ -1,5 +1,5 @@
  //控制层 
-app.controller('goodsController' ,function($scope,$controller   ,goodsService){	
+app.controller('goodsController' ,function($scope,$controller ,itemCatService  ,goodsService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -58,15 +58,19 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService){
 		goodsService.dele( $scope.selectIds ).success(
 			function(response){
 				if(response.success){
+					alert(response.message);
 					$scope.reloadList();//刷新列表
 					$scope.selectIds=[];
-				}						
+				}else {
+					alert(response.message);
+                    $scope.selectIds=[];
+				}
 			}		
 		);				
 	}
 	
 	$scope.searchEntity={};//定义搜索对象 
-	
+    $scope.array = ['未审核', '已审核', '已驳回', '关闭'];
 	//搜索
 	$scope.search=function(page,rows){			
 		goodsService.search(page,rows,$scope.searchEntity).success(
@@ -76,5 +80,31 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService){
 			}			
 		);
 	}
+
+	$scope.itemCatList=[];
+	$scope.findItemCatList=function () {
+        itemCatService.findItemCatList().success(
+        	function (response) {
+				for(var i=0;i<response.length;i++){
+                    $scope.itemCatList[response[i].id]=response[i].name;
+				}
+            }
+		);
+    }
+
+    $scope.updateStatus=function (status) {
+        goodsService.updateStatus($scope.selectIds,status).success(
+        	function (response) {
+				if(response.success){
+					alert(response.message);
+                    $scope.reloadList();
+                    $scope.selectIds=[];
+				}else {
+                    alert(response.message);
+                    $scope.selectIds=[];
+				}
+            }
+		);
+    }
     
 });	

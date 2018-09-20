@@ -67,14 +67,21 @@ public class GoodsController {
 	 * @return
 	 */
 	@RequestMapping("/update")
-	public Result update(@RequestBody TbGoods goods){
-		try {
-			goodsService.update(goods);
-			return new Result(true, "修改成功");
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new Result(false, "修改失败");
+	public Result update(@RequestBody Goods goods){
+		String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+
+		if(sellerId.equalsIgnoreCase(goods.getGoods().getSellerId())){
+			try {
+				goodsService.update(goods);
+				return new Result(true, "修改成功");
+			} catch (Exception e) {
+				e.printStackTrace();
+				return new Result(false, "修改失败");
+			}
+		}else {
+			return new Result(false, "你没权限！别瞎鸡巴搞！");
 		}
+
 	}	
 	
 	/**
@@ -117,5 +124,14 @@ public class GoodsController {
 		goods.setSellerId(sellerId);
 		return goodsService.findPage(goods, page, rows);		
 	}
-	
+	@RequestMapping("/marketable")
+	public Result marketable(Long[] ids){
+		try {
+			goodsService.marketable(ids);
+			return new Result(true,"下架成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Result(true,"下架失败");
+		}
+	}
 }

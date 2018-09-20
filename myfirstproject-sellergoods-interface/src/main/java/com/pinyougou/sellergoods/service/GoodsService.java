@@ -34,7 +34,7 @@ public interface GoodsService {
 	/**
 	 * 修改
 	 */
-	public void update(TbGoods goods);
+	public void update(Goods goods);
 	
 
 	/**
@@ -46,7 +46,7 @@ public interface GoodsService {
 	
 	
 	/**
-	 * 批量删除
+	 * 商家批量删除
 	 * @param ids
 	 */
 	public void delete(Long[] ids);
@@ -58,5 +58,22 @@ public interface GoodsService {
 	 * @return
 	 */
 	public PageResult findPage(TbGoods goods, int pageNum, int pageSize);
-	
+
+	/**
+	 * 更新商品状态
+	 * @param ids
+	 * @param status
+	 */
+    void updateStatus(Long[] ids, String status);
+
+	/**
+	 * 运营商逻辑删除
+	 */
+	void del(Long[] ids);
+
+	/**
+	 * 商家商品下架
+	 * @param ids
+	 */
+    void marketable(Long[] ids);
 }

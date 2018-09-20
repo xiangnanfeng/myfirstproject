@@ -23,10 +23,13 @@ app.service('goodsService',function($http){
 	}
 	//删除
 	this.dele=function(ids){
-		return $http.get('../goods/delete.do?ids='+ids);
+		return $http.get('../goods/del.do?ids='+ids);
 	}
 	//搜索
 	this.search=function(page,rows,searchEntity){
 		return $http.post('../goods/search.do?page='+page+"&rows="+rows, searchEntity);
-	}    	
+	}
+    this.updateStatus=function (ids,status) {
+        return $http.get('../goods/updateStatus.do?ids='+ids+'&status='+status);
+    }
 });

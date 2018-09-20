@@ -199,6 +199,8 @@ public class GoodsServiceImpl implements GoodsService {
         Criteria criteria = example.createCriteria();
         //查询时排除被运营商删除了的商品（此处是逻辑删除）1表示被删除的，要查询没有被删除的 。
         criteria.andIsDeleteIsNull();
+        //只查询上架的商品
+        criteria.andIsMarketableEqualTo("1");
         if (goods != null) {
             if (goods.getSellerId() != null && goods.getSellerId().length() > 0) {
                 criteria.andSellerIdLike(goods.getSellerId());

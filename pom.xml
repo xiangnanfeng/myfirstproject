@@ -278,5 +278,8 @@
   	<module>myfirstproject-manager-web</module>
   	<module>myfirstproject-common</module>
   	<module>myfirstproject-shop-web</module>
+      <module>myfirstproject-content-interface</module>
+	  <module>myfirstproject-content-service</module>
+      <module>myfirstproject-portal-web</module>
   </modules>
 </project>

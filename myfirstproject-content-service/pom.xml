@@ -89,7 +89,11 @@
             <artifactId>myfirstproject-dao</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.myfirstproject</groupId>
+            <artifactId>myfirstproject-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>

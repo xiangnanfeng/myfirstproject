@@ -90,12 +90,11 @@ app.controller('contentController' ,function($scope,$controller,contentService,u
             }
 		);
     }
-    $scope.image={url:{}};
     $scope.upLoadFile=function () {
         uploadService.uploadFile().success(
         	function (response) {
 				if(response.success){
-					$scope.image.url=response.message;
+					$scope.entity.pic=response.message;
 				}else {
 					alert(response.message);
 				}

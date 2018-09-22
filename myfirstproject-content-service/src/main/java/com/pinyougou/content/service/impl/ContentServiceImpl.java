@@ -12,6 +12,7 @@ import com.pinyougou.pojo.TbContentExample;
 import com.pinyougou.pojo.TbContentExample.Criteria;
 
 import entity.PageResult;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -25,6 +26,9 @@ public class ContentServiceImpl implements ContentService {
 
 	@Autowired
 	private TbContentMapper contentMapper;
+
+	@Autowired
+	private RedisTemplate redisTemplate;
 
 	/**
 	 * 查询全部
@@ -49,6 +53,11 @@ public class ContentServiceImpl implements ContentService {
 	 */
 	@Override
 	public void add(TbContent content) {
+
+		Long categoryId = content.getCategoryId();
+
+		redisTemplate.boundHashOps("content").delete(categoryId);
+
 		contentMapper.insert(content);
 	}
 
@@ -57,8 +66,22 @@ public class ContentServiceImpl implements ContentService {
 	 * 修改
 	 */
 	@Override
-	public void update(TbContent content){
+	public void update(TbContent content){//更新的时候要注意，用户有可能更改了广告的分类id，所有要先查出被更改前的分类id，再比较看看，如果
+		//确实改变，那就需要将缓存中的两处都要删除
+		Long id = content.getId();
+
+		TbContent tbContent = contentMapper.selectByPrimaryKey(id);
+
+		Long categoryId = tbContent.getCategoryId();
+
+		redisTemplate.boundHashOps("content").delete(categoryId);
+
 		contentMapper.updateByPrimaryKey(content);
+		//longValue方法将包装类Long 的引用转换为基本数据类型
+		//
+		if(categoryId.longValue()!=content.getCategoryId().longValue()){
+			redisTemplate.boundHashOps("content").delete(content.getCategoryId());
+		}
 	}
 
 	/**
@@ -77,6 +100,10 @@ public class ContentServiceImpl implements ContentService {
 	@Override
 	public void delete(Long[] ids) {
 		for(Long id:ids){
+			TbContent tbContent = contentMapper.selectByPrimaryKey(id);
+
+			redisTemplate.boundHashOps("content").delete(tbContent.getCategoryId());
+
 			contentMapper.deleteByPrimaryKey(id);
 		}
 	}
@@ -107,6 +134,32 @@ public class ContentServiceImpl implements ContentService {
 
 		Page<TbContent> page= (Page<TbContent>)contentMapper.selectByExample(example);
 		return new PageResult(page.getTotal(), page.getResult());
+	}
+
+	@Override
+	public List<TbContent> findContenByCategegoryId(Long categegoryId) {
+
+		List<TbContent> contentList = (List<TbContent>) redisTemplate.boundHashOps("content").get(categegoryId);
+
+		if(contentList==null){
+			TbContentExample example = new TbContentExample();
+
+			Criteria criteria = example.createCriteria();
+
+			criteria.andCategoryIdEqualTo(categegoryId);
+
+			criteria.andStatusEqualTo("1");
+			//在查询时根据sort_order字段排序
+			example.setOrderByClause("sort_order");
+
+			contentList = contentMapper.selectByExample(example);
+
+			redisTemplate.boundHashOps("content").put(categegoryId,contentList);
+			System.out.println("走的数据库！");
+			return contentList;
+		}
+		System.out.println("走的缓存");
+		return contentList;
 	}
 
 }

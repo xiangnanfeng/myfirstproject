@@ -281,5 +281,9 @@
       <module>myfirstproject-content-interface</module>
 	  <module>myfirstproject-content-service</module>
       <module>myfirstproject-portal-web</module>
+      <module>myfirstproject-solr-util</module>
+	  <module>myfirstproject-search-interface</module>
+	  <module>myfirstproject-search-service</module>
+	  <module>myfirstproject-search-web</module>
   </modules>
 </project>

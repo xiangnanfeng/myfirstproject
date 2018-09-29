@@ -1,8 +1,10 @@
 package com.pinyougou.manager.controller;
 import java.util.List;
 
+import com.pinyougou.pages.service.ItemPageService;
+import com.pinyougou.pojo.TbItem;
 import com.pinyougou.pojogroup.Goods;
-import org.springframework.security.core.context.SecurityContextHolder;
+import com.pinyougou.search.service.ItemSearchService;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +25,9 @@ public class GoodsController {
 
 	@Reference
 	private GoodsService goodsService;
+
+	@Reference
+	private ItemSearchService itemSearchService;
 	
 	/**
 	 * 返回全部列表
@@ -84,22 +89,7 @@ public class GoodsController {
 	public Goods findOne(Long id){
 		return goodsService.findOne(id);		
 	}
-	
-	/**
-	 * 批量删除
-	 * @param ids
-	 * @return
-	 */
-	@RequestMapping("/delete")
-	public Result delete(Long [] ids){
-		try {
-			goodsService.delete(ids);
-			return new Result(true, "删除成功"); 
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new Result(false, "删除失败");
-		}
-	}
+
 	
 		/**
 	 * 查询+分页
@@ -117,6 +107,10 @@ public class GoodsController {
 	public Result updateStatus(Long[] ids,String status){
 		try {
 			goodsService.updateStatus(ids,status);
+			if("1".equals(status)){
+				List<TbItem> itemList = goodsService.findItemListByIdAndStatus(ids, status);
+				itemSearchService.importItemList(itemList);
+			}
 			return  new Result(true,"审核成功");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -124,14 +118,28 @@ public class GoodsController {
 		}
 	}
 
+	/**
+	 * 批量删除
+	 * @param ids
+	 * @return
+	 */
 	@RequestMapping("/del")
 	public Result del(Long[] ids){
 		try {
 			goodsService.del(ids);
+			itemSearchService.deleteSearch(ids);
 			return new Result(true,"删除成功！");
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new Result(false,"删除失败！");
 		}
+	}
+
+	@Reference(timeout = 40000)
+	private ItemPageService itemPageService;
+
+	@RequestMapping("/template")
+	public void newTemplate(Long goodsId){
+		itemPageService.getItemHtml(goodsId);
 	}
 }

@@ -8,5 +8,8 @@ app.controller('contentController' ,function($scope,contentService){
             }
 		);
     }
-
+    $scope.searchContext="";
+    $scope.search=function () {
+        location.href="http://localhost:9104/search.html#?searchContext="+$scope.searchContext;
+    }
 });	

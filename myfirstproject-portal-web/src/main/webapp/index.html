@@ -71,8 +71,8 @@
 							<form action="" class="sui-form form-inline">
 								<!--searchAutoComplete-->
 								<div class="input-append">
-									<input type="text" id="autocomplete" type="text" class="input-error input-xxlarge" />
-									<button class="sui-btn btn-xlarge btn-danger" type="button">搜索</button>
+									<input type="text" id="autocomplete" type="text" class="input-error input-xxlarge" ng-model="searchContext"/>
+									<button class="sui-btn btn-xlarge btn-danger" type="button" ng-click="search()">搜索</button>
 								</div>
 							</form>
 						</div>
@@ -531,7 +531,7 @@
 					  <div class="carousel-inner">
                           <div ng-repeat="content in contentList1" class="{{$index==0?'active':''}} item">
                               <a href="{{content.url}}/">
-                                  <img src="{{content.pic}}"  />
+                                  <img ng-src="{{content.pic}}"  />
                               </a>
                           </div>
 					  </div><a href="#myCarousel" data-slide="prev" class="carousel-control left">‹</a><a href="#myCarousel" data-slide="next" class="carousel-control right">›</a>

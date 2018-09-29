@@ -285,5 +285,7 @@
 	  <module>myfirstproject-search-interface</module>
 	  <module>myfirstproject-search-service</module>
 	  <module>myfirstproject-search-web</module>
+      <module>myfirstproject-pages-interface</module>
+	  <module>myfirstproject-pages-service</module>
   </modules>
 </project>

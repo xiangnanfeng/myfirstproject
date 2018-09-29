@@ -5,6 +5,8 @@ import com.pinyougou.mapper.TbItemMapper;
 import com.pinyougou.pojo.TbItem;
 import com.pinyougou.pojo.TbItemExample;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.stereotype.Component;
 
@@ -46,10 +48,10 @@ public class SolrUtil {
         solrTemplate.commit();
     }
 
-/*    public static void main(String[] args) {
+    public static void main(String[] args) {
         ApplicationContext applicationContext =
                 new ClassPathXmlApplicationContext("classpath*:spring/applicationContext*.xml");
         SolrUtil solrUtil = (SolrUtil) applicationContext.getBean("solrUtil");
         solrUtil.itemData();
-    }*/
+    }
 }

@@ -23,6 +23,7 @@ public class BrandServiceImpl implements BrandService {
 
 	@Autowired
 	private TbBrandMapper brandMapper;
+
 	/**
 	 * 查询所有品牌
 	 */
@@ -83,8 +84,10 @@ public class BrandServiceImpl implements BrandService {
 			if(tbBrand.getFirstChar()!=null && tbBrand.getFirstChar().length()==1) {
 				createCriteria.andFirstCharLike("%"+tbBrand.getFirstChar()+"%");
 			}
-		}	
+		}
+
 		Page<TbBrand> page = (Page<TbBrand>) brandMapper.selectByExample(example );
+
 		return new PageResult(page.getTotal(), page.getResult());
 	}
 

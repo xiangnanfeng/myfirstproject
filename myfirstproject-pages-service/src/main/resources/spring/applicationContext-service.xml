@@ -8,10 +8,7 @@
         http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 	<!--<context:property-placeholder location="classpath:properties/page.properties"/>-->
-    <dubbo:protocol name="dubbo" port="20884"></dubbo:protocol>
-	<dubbo:application name="myfirstproject-pages-service"/>
-    <dubbo:registry address="zookeeper://192.168.25.135:2181"/>
-    <dubbo:annotation package="com.pinyougou.pages.service.impl" />
+  <context:component-scan base-package="com.pinyougou.pages.service.impl"/>
 
 	<bean id="freeMarkerConfigurer" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
 		<property name="defaultEncoding" value="UTF-8"/>

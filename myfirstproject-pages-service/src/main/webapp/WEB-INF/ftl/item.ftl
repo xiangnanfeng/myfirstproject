@@ -1,8 +1,9 @@
 <#include "head.ftl">
-<body ng-app="pinyougou" ng-controller="itemController">
+<body ng-app="pinyougou" ng-controller="itemController" ng-init="initSpecification()">
 <#assign ImageList=goodsDesc.itemImages?eval>
 <#assign customAttrList=goodsDesc.customAttributeItems?eval>
 <#assign specificationList=goodsDesc.specificationItems?eval>
+
 <!--页面顶部 开始-->
 <div id="nav-bottom">
     <!--顶部-->
@@ -164,7 +165,7 @@
                 <div class="sku-name">
                     <h4>${goods.goodsName}</h4>
                 </div>
-                <div class="news"><span>${goods.caption}</span></div>
+                <div class="news"><span>{{skuItem.title}}</span></div>
                 <div class="summary">
                     <div class="summary-wrap">
                         <div class="fl title">
@@ -172,7 +173,7 @@
                         </div>
                         <div class="fl price">
                             <i>¥</i>
-                            <em>${goods.price?c}</em>
+                            <em>{{skuItem.price}}</em>
                             <span>降价通知</span>
                         </div>
                         <div class="fr remark">
@@ -238,7 +239,7 @@
                         <div class="fl">
                             <ul class="btn-choose unstyled">
                                 <li>
-                                    <a href="cart.html" target="_blank" class="sui-btn  btn-danger addshopcar">加入购物车</a>
+                                    <a href="cart.html" target="_blank" class="sui-btn  btn-danger addshopcar" ng-click="addToCart()">加入购物车</a>
                                 </li>
                             </ul>
                         </div>

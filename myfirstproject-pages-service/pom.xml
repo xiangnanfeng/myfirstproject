@@ -89,6 +89,11 @@
             <version>2.3.23</version>
         </dependency>
         <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-client</artifactId>
+            <version>5.13.4</version>
+        </dependency>
+        <dependency>
             <groupId>com.myfirstproject</groupId>
             <artifactId>myfirstproject-dao</artifactId>
             <version>0.0.1-SNAPSHOT</version>

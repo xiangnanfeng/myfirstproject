@@ -287,5 +287,16 @@
 	  <module>myfirstproject-search-web</module>
       <module>myfirstproject-pages-interface</module>
 	  <module>myfirstproject-pages-service</module>
+      <module>myfirstproject-pages-web</module>
+      <module>myfirstproject-user-interface</module>
+	  <module>myfirstproject-user-service</module>
+	  <module>myfirstproject-user-web</module>
+      <module>myfirstproject-cart-interface</module>
+      <module>myfirstproject-cart-service</module>
+      <module>myfirstproject-cart-web</module>
+      <module>myfirstproject-order-interface</module>
+	  <module>myfirstproject-order-service</module>
+      <module>myfirstproject-pay-interface</module>
+	  <module>myfirstproject-pay-service</module>
   </modules>
 </project>
